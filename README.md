@@ -1,4 +1,4 @@
-# Telco Customer Churn Prediction
+# Customer Churn Prediction | Applied ML & MLOps Pipeline
 
 [![CI](https://github.com/RaviB11/customer-churn-mlops-pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/RaviB11/customer-churn-mlops-pipeline/actions/workflows/ci.yml)
 
@@ -25,9 +25,26 @@ Takeaways:
 * The top 10% of customers by score churned at 2.9× the average rate.
 * Subgroup recall and precision by gender and senior-citizen status are in `reports/subgroup_metrics_test_set.csv`. See [`REPORT.md`](REPORT.md) for the business write-up and `notebooks/churn_analysis.ipynb` for the full analysis with charts.
 
+### Model evaluation visuals
+
+**ROC and precision-recall curves**
+
+![ROC and precision-recall curves](reports/figures/roc_pr_curves.png)
+
+**Customer targeting lift**
+
+![Customer targeting lift chart](reports/figures/lift_chart.png)
+
 ## Quick start
 
 Requires Python 3.12.
+
+**Clone the repository**
+
+```bash
+git clone https://github.com/RaviB11/customer-churn-mlops-pipeline.git
+cd customer-churn-mlops-pipeline
+```
 
 **Windows (PowerShell)**
 ```powershell
@@ -51,8 +68,7 @@ pytest -q
 ### Scoring new customers (CLI)
 
 ```powershell
-python scripts\predict_churn.py --input customers.csv --output predictions.csv
-python scripts\predict_churn.py --json '{"gender":"Female","SeniorCitizen":0, ...}'
+python scripts\predict_churn.py --input data\sample\new_customers.csv --output predictions.csv
 ```
 Input is the CRM's raw format (same columns as the source CSV, `Churn` not needed; blank `TotalCharges` is fine for new customers). Output per customer: `churn_probability`, `churn_flag` (at or above the model's threshold), and `risk_tier` (high / medium / low).
 
@@ -71,7 +87,7 @@ Endpoints: `GET /health`, `POST /predict` (one record), `POST /predict/batch` (u
 docker build -t telco-churn .
 docker run -p 8000:8000 -v ${PWD}/monitoring:/app/monitoring telco-churn
 ```
-The image trains the model during the build so the pickled pipeline always matches the image's library versions. The Dockerfile has not yet been built and run outside CI; a production design would use a separate inference-only image that pulls a registered model.
+The image trains the model during the build so the pickled pipeline always matches the image's library versions. The Docker image builds successfully and passes containerized API smoke tests in GitHub Actions. The image trains the model during the build to maintain compatibility with the packaged dependencies. This is a validated container-packaged prototype, not a publicly hosted production service. a production design would use a separate inference-only image that pulls a registered model.
 
 Only load model bundles you trained yourself: joblib/pickle files can execute code when loaded.
 
@@ -128,8 +144,24 @@ data/             raw CSV, sample inputs, manifest (warehouse DB is generated)
 
 ## CI
 
-`.github/workflows/ci.yml` is defined but **has not yet run on GitHub**. On every push and pull request it runs: ruff lint and format check, the pytest suite on Python 3.11 and 3.12, a fast training smoke run, then builds the Docker image and calls the API inside the container.
+GitHub Actions runs automatically on pushes to `main` and pull requests.
+
+The pipeline includes:
+
+- Python 3.12 dependency installation
+- Ruff lint and formatting checks
+- 65 automated pytest tests
+- Fast model-training and prediction smoke tests
+- Docker image build and containerized API smoke test
+
+The GitHub Actions workflow has completed successfully.
+
+The fast training smoke test uses a reduced hyperparameter search and may select logistic regression instead of XGBoost. The reported model performance comes from the full training run.
+
+[View GitHub Actions results](https://github.com/RaviB11/customer-churn-mlops-pipeline/actions)
 
 ## License and attribution
 
-Dataset: IBM, CC BY 4.0. Code: add the license of your choice.
+**Source code:** MIT License — see [LICENSE](LICENSE).
+
+**Dataset:** IBM Telco Customer Churn public sample. Original source and attribution are documented in [data/README.md](data/README.md). The dataset is third-party material and is not relicensed under this project's MIT License.
