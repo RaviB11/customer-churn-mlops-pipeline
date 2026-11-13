@@ -10,7 +10,7 @@ This repository is a **locally served, container-packaged prototype** built on t
 | Which customers the model *would* flag for outreach | That outreach prevents churn, or any revenue saved |
 | Well-calibrated probabilities on this sample | That calibration holds as the customer base changes |
 | Drift detection on synthetic, deliberately shifted traffic | Live monitoring of real customers or of model accuracy over time |
-| A Dockerfile and a CI workflow definition | A built and hosted service, or a passing CI run (not yet run on GitHub) |
+| Successful GitHub Actions CI checks, Docker image build, and containerized API smoke tests | A publicly hosted production service or real-customer traffic |
 | A simulated four-table SQLite warehouse with integrity checks | Integration with a real data warehouse |
 
 ## 1. Validation design (temporal)
@@ -77,7 +77,11 @@ None of this constitutes a completed responsible-AI review.
 
 ## 8. Deployment architecture
 
-**Now:** FastAPI app served locally. The Dockerfile retrains at build time, which keeps library versions consistent but ties training data into the image. Neither the image nor the CI workflow has been run outside this development environment.
+**Now:** FastAPI serves predictions locally, and the Docker image has been successfully built and smoke-tested through GitHub Actions. The CI workflow validates dependencies, linting, automated tests, model training, predictions, Docker packaging, and API availability.
+
+The Dockerfile retrains the model at image-build time to maintain dependency compatibility. However, this couples training with serving and packages training data into the image.
+
+The project has not been deployed as a publicly hosted production service. It does not demonstrate production authentication, service availability, autoscaling, or live customer monitoring.
 
 **Production:**
 - Separate the training pipeline from a small inference-only image that pulls a versioned model from a model registry.
