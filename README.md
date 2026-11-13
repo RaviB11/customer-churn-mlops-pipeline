@@ -1,7 +1,6 @@
 # Telco Customer Churn Prediction
 
-<!-- CI badge: add after the repo exists and the first Actions run passes, e.g.
-![CI](https://github.com/<github-user>/telco-churn/actions/workflows/ci.yml/badge.svg) -->
+[![CI](https://github.com/RaviB11/customer-churn-mlops-pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/RaviB11/customer-churn-mlops-pipeline/actions/workflows/ci.yml)
 
 End-to-end churn-risk scoring prototype for a hypothetical telecom retention team: simulated SQLite warehouse → cleaning → feature engineering → three models (decision tree, logistic regression, tuned XGBoost) → packaged predictor, CLI, REST API and Dockerfile → privacy-minimised prediction logging and drift monitoring.
 
