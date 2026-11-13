@@ -1,0 +1,7 @@
+{
+  "raw_csv": "data/raw/Telco-Customer-Churn.csv",
+  "raw_sha256": "16320c9c1ec72448db59aa0a26a0b95401046bef5d02fd3aeb906448e3055e91",
+  "rows": 7043,
+  "created_utc": "2026-11-13T13:37:18+00:00",
+  "source": "IBM Telco Customer Churn sample (CC BY 4.0)"
+}

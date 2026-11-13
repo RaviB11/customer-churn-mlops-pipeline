@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    env:
+      CHURN_DISABLE_MLFLOW: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: requirements*.txt
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+      - name: Lint
+        run: |
+          ruff check .
+          ruff format --check .
+      - name: Tests
+        run: pytest -q
+      - name: Smoke-train and score sample customers
+        run: |
+          python scripts/train.py --fast
+          python scripts/predict_churn.py --input data/sample/new_customers.csv --no-log
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t telco-churn:ci .
+      - name: Run container and hit the API
+        run: |
+          docker run -d --name churn -p 8000:8000 telco-churn:ci
+          for i in $(seq 1 30); do curl -sf localhost:8000/health && break; sleep 2; done
+          curl -sf -X POST localhost:8000/predict -H "Content-Type: application/json" \
+            -d @data/sample/customer.json
+          docker logs churn

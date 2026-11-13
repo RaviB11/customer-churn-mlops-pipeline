@@ -1,0 +1,4 @@
+model,cv_roc_auc,cv_roc_auc_std,test_roc_auc,test_pr_auc,threshold,test_recall,test_precision,test_f1,test_accuracy,accuracy_at_0.5,recall_at_0.5,top10_lift,customers_flagged,churners_missed
+decision_tree,0.8289,0.0157,0.838,0.6132,0.2617,0.8476,0.4847,0.6167,0.7204,0.7949,0.4973,2.752,654,57
+logistic_regression,0.8474,0.0156,0.8459,0.6643,0.2649,0.8075,0.5198,0.6325,0.7509,0.7977,0.5,2.886,581,72
+xgboost,0.8497,0.0155,0.8502,0.6732,0.2739,0.8048,0.519,0.631,0.7502,0.8006,0.5267,2.859,580,73

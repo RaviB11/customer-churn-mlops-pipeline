@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+# Generated artifacts (rebuild with scripts/train.py)
+models/*.joblib
+models/*.json
+data/warehouse/
+mlflow.db
+mlruns/
+mlartifacts/
+monitoring/*.jsonl

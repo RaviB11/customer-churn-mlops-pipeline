@@ -1,0 +1,21 @@
+[project]
+name = "churn-pipeline"
+version = "1.0.0"
+description = "Telco customer churn prediction: ETL, models, REST API and monitoring"
+requires-python = ">=3.10"
+
+[tool.setuptools]
+packages = ["churn_pipeline"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+extend-exclude = ["notebooks"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["B008"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]

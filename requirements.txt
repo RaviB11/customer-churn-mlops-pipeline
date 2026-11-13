@@ -1,0 +1,10 @@
+# Runtime + training (what the Docker image installs). Exact versions = tested.
+numpy==2.5.4
+pandas==3.0.6
+scikit-learn==1.9.1
+xgboost==3.4.1
+SQLAlchemy==2.1.8
+joblib==1.6.0
+fastapi==0.162.5
+uvicorn==0.54.0
+pydantic==2.14.3
