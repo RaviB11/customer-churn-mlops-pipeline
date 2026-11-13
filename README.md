@@ -28,7 +28,7 @@ Takeaways:
 
 ## Quick start
 
-Requires Python 3.11 or 3.12.
+Requires Python 3.12.
 
 **Windows (PowerShell)**
 ```powershell
